@@ -1,25 +1,26 @@
-print("yes")
-from machine import UART,Pin
-a = Pin(5,Pin.OUT)
+from machine import Pin
+from wifiConnect import connect
+from mqtt_handle import mqttOperations
+from utils import *
 import uos
+#uos.dupterm(None, 1)
+utils = utilities()
+if(connect()):# To connect to wifi
+    print("Wifi Connection is good!")
+    wifi = True
+else:
+    print("Issue with wifi, please check.")
 
-import time
-ch =''
-while True:      
-    print("beforeCHHH",ch)
-    uos.dupterm(None, 1)
-    uart = UART(0, 115200)
-    if uart.any():
-        #ch = uart.read()
-        #uart.write(ch)
-        uos.dupterm(UART(0, 115200), 1)
-        #print("uartRead",uart.read())
-        print("chchch",ch)
-        if(uart.read() == b'Hel'):
-         a.on()
-        else:
-           a.off()
-        print("exited")
-    print("final end")
-    time.sleep(1)
-    print("slept")
+jsonInputs = utils.jsonHandler()
+
+
+class mqtt_handle:
+    def __init__(self):
+        pass
+
+obj = mqttOperations(
+        client = jsonInputs["client"],
+        broker = jsonInputs["broker"],
+        port = jsonInputs["port"],
+        topic = jsonInputs["topic"])
+obj.executor()

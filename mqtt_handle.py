@@ -1,9 +1,9 @@
 # Complete project details at https://RandomNerdTutorials.com
 from mqtt_custom import MQTTClient
 import time
+import uos
 from utils import *
-from machine import Pin
-
+from machine import UART,Pin
 utils = utilities()
 class mqttOperations:
     #obj = mqttOperations(topic = "test",message = "daddy",connectionType = "publish",client = "lohit")
@@ -20,6 +20,7 @@ class mqttOperations:
       if("received" not in "msg"):
         incomingData=str(msg)[2:len(msg)+2].split("-")
         print(incomingData)
+        self.uartCommunication(incomingData)
         for i in incomingData:
           try:
             print("incomingData",i)
@@ -65,3 +66,20 @@ class mqttOperations:
           except Exception as error:
             print("Got Error %s, Restarting the MCU"%(error))
             utils.restart_and_reconnect()
+
+    def uartCommunication(self,incomingData):
+      
+      a = Pin(5,Pin.OUT)
+      data = incomingData.decode()
+      #uos.dupterm(None, 1)
+      uart = UART(0, 115200)
+      if uart.any():
+        #ch = uart.read()
+        uart.write(data)
+        #uos.dupterm(UART(0, 115200), 1)
+        #print("uartRead",uart.read())
+        if(uart.read() == b'Hel'):
+          a.on()
+        else:
+            a.off()
+      #uos.dupterm(UART(0, 115200), 1)
