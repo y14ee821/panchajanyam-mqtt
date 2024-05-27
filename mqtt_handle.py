@@ -10,6 +10,7 @@ class mqttOperations:
     def __init__(self,**kwargs):
       self.inputs = kwargs
       print(self.inputs)
+      
     def sub_cb(self,topic, msg):
       outputs = {}
       print((topic, msg))
@@ -17,23 +18,26 @@ class mqttOperations:
       #outputs = utils.opInitialization()#fetches pin numbers from json and enables Pins in output mode 
       outputs["op1"] = machine.Pin(5,machine.Pin.OUT)
       outputs["op2"] = machine.Pin(4,machine.Pin.OUT)
+
+      
       if("received" not in "msg"):
         incomingData=str(msg)[2:len(msg)+2].split("-")
-        print(incomingData)
-        self.uartCommunication(incomingData)
+        
+        self.uartCommunication(msg)
         for i in incomingData:
           try:
-            print("incomingData",i)
+            #print("incomingData",i)
             if(int(i.split(":")[-1])==1):
-              print("split",i.split(":")[0])
+              #print("split",i.split(":")[0])
               type(outputs[i.split(":")[0]])
               outputs[i.split(":")[0]].on()
             else:
-              print("split",i.split(":")[0])
+              #print("split",i.split(":")[0])
               type(outputs[i.split(":")[0]])
               outputs[i.split(":")[0]].off()
           except Exception as error:
-            print("error",error)
+            #print("error",error)
+            continue
 
 
 
@@ -58,28 +62,39 @@ class mqttOperations:
           utils.restart_and_reconnect()
 
         while True:
+
           try:
             new_message = client.check_msg()
-            #if new_message != 'None':
-            #  client.publish(self.inputs["topic"], b'received')
+            #print("new_message",new_message)
+            # if new_message != 'None':
+             #print("Message received")
+            
+            client.publish(self.inputs["topic"], b'received')
             time.sleep(0.25)
+            self.inputsStatus = {"ip1":machine.Pin(12,machine.Pin.IN), "ip2":machine.Pin(14,machine.Pin.IN)}
+            #print(self.inputsStatus["ip1"].value(),self.inputsStatus["ip2"].value())
+            #client.publish(self.inputsStatus["topic"]+"/status",f'"ip1":{self.inputsStatus["ip1"]},"ip2":{self.inputs["ip2"]}')
+            # try:
+            #    self.uartRead()
+            # except Exception as uartError:
+            #    print("Error in reading the UART",uartError) 
           except Exception as error:
             print("Got Error %s, Restarting the MCU"%(error))
             utils.restart_and_reconnect()
 
-    def uartCommunication(self,incomingData):
-      
-      a = Pin(5,Pin.OUT)
+    def uartCommunication(self,incomingData):    
+      #print("incomingData",incomingData)  
       data = incomingData.decode()
-      #uos.dupterm(None, 1)
+
+      self.inputs["REPL_FLAG"] and uos.dupterm(None, 1)#to deattach uart0 to repl
+      uart = UART(0, 115200)
+      uart.write(data)
+      self.inputs["REPL_FLAG"] and  uos.dupterm(uart, 1)#to attach uart0 to repl
+    def uartRead(self):
+      uos.dupterm(None, 1)
       uart = UART(0, 115200)
       if uart.any():
-        #ch = uart.read()
-        uart.write(data)
-        #uos.dupterm(UART(0, 115200), 1)
-        #print("uartRead",uart.read())
-        if(uart.read() == b'Hel'):
-          a.on()
-        else:
-            a.off()
-      #uos.dupterm(UART(0, 115200), 1)
+        ch = uart.read(3)       
+        uos.dupterm(UART(0, 115200), 1)
+        print(ch)
+              

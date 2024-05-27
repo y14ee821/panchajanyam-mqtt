@@ -44,7 +44,8 @@ void loop()
 {
 
 SwitchControl();
-delay(500);
+//delay(25);
+
 }
 
 
@@ -119,6 +120,7 @@ if(masterInfo[i].manualState!=digitalRead(ipSwitchPin))//if previous state != cu
  logging &&  Serial.println("Change detected in the Switch Value of Pin:"+String(ipSwitchPin));
   logging && Serial.println(masterInfo[i].switchTime);
   masterInfo[i].manualState=digitalRead(ipSwitchPin);//updating manual state to current one.
+  //currentOP_States();
 }
 else
 {
@@ -133,11 +135,17 @@ void SwitchControl()
     manualSwitchTimeUpdater(masterInfo[i].ipSwitchPin, i);//updates if there is any change in the manual switch.
     if(Serial.available())
     {
+      
       String data = Serial.readString();
-      Serial.println(data);
+      //Serial.println(data);
       uartParserUpdater(data);
+      
       //delay(6000);
     }
+//     else
+//     {
+// currentOP_States(); 
+//     }
     
     priority = priorityGenerator(masterInfo[i].uartTime,masterInfo[i].switchTime,masterInfo[i].priority,masterInfo[i].opPin,i,masterInfo[i].ipSwitchPin);
     if(priority=="manual")
@@ -160,9 +168,38 @@ void SwitchControl()
     }
 
 }
+//currentOP_States();
 }
 
 
 
+void currentOP_States()
+{
+
+//digitalRead(masterInfo[0].opPin);
+//digitalRead(masterInfo[1].opPin);
+//digitalRead(masterInfo[2].opPin);
+//digitalRead(masterInfo[3].opPin);
+// for(int i=0;i<4;i++)
+// {
+// Serial.println("Current Value of Pin: "+String(masterInfo[i].opPin)+" is "+String(digitalRead(masterInfo[i].opPin)));
+
+//Serial.print("Lohit Siva Sai Varma Chinta ");
+Serial.print(String(digitalRead(masterInfo[0].opPin))+"-"+String(digitalRead(masterInfo[1].opPin)));
+// }
+
+
+//String s = "currentop1:"+String(digitalRead(masterInfo[0].opPin))+",currentop2:"+String(digitalRead(masterInfo[1].opPin))+",currentop3:"+String(digitalRead(masterInfo[2].opPin))+",currentop4:"+String(digitalRead(masterInfo[3].opPin));
+//String s = "cop1:"+String(digitalRead(masterInfo[0].opPin))+",cop2:"+String(digitalRead(masterInfo[1].opPin))+",cop3:"+String(digitalRead(masterInfo[2].opPin))+",cop4:"+String(digitalRead(masterInfo[3].opPin));
+
+
+
+
+//Serial.write();
+
+//Serial.write(s.c_str());
+
+//Serial.println(s.c_str());
+}
 
 

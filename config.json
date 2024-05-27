@@ -1,9 +1,9 @@
 {
-    "broker": "192.168.0.31",
+    "broker": "test.mosquitto.org",
     "port": 1883,
     "connectionType": "publish",
     "topic":"rao",
-    "client":"lohit",
+    "client":"lohit-automationClient",
     "subTopic1":1,
     "subTopic2":1,
     "ssid": "Balcony",

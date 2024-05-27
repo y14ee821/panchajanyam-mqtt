@@ -1,9 +1,15 @@
 from machine import Pin
+
+dettach_attach_REPL = 1
+
+
+import uos
+dettach_attach_REPL and uos.dupterm(None, 1)#to deattach uart0 to repl
+
 from wifiConnect import connect
 from mqtt_handle import mqttOperations
 from utils import *
 import uos
-#uos.dupterm(None, 1)
 utils = utilities()
 if(connect()):# To connect to wifi
     print("Wifi Connection is good!")
@@ -22,5 +28,6 @@ obj = mqttOperations(
         client = jsonInputs["client"],
         broker = jsonInputs["broker"],
         port = jsonInputs["port"],
-        topic = jsonInputs["topic"])
+        topic = jsonInputs["topic"],
+        REPL_FLAG = dettach_attach_REPL)
 obj.executor()
