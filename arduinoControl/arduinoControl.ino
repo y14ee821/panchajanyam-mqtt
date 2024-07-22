@@ -44,7 +44,7 @@ void loop()
 {
 
 SwitchControl();
-//delay(25);
+delay(50);
 
 }
 
@@ -189,17 +189,6 @@ Serial.print(String(digitalRead(masterInfo[0].opPin))+"-"+String(digitalRead(mas
 // }
 
 
-//String s = "currentop1:"+String(digitalRead(masterInfo[0].opPin))+",currentop2:"+String(digitalRead(masterInfo[1].opPin))+",currentop3:"+String(digitalRead(masterInfo[2].opPin))+",currentop4:"+String(digitalRead(masterInfo[3].opPin));
-//String s = "cop1:"+String(digitalRead(masterInfo[0].opPin))+",cop2:"+String(digitalRead(masterInfo[1].opPin))+",cop3:"+String(digitalRead(masterInfo[2].opPin))+",cop4:"+String(digitalRead(masterInfo[3].opPin));
-
-
-
-
-//Serial.write();
-
-//Serial.write(s.c_str());
-
-//Serial.println(s.c_str());
 }
 
 

@@ -2,7 +2,8 @@ import network
 from machine import Pin
 from utils import utilities
 import time
-
+import gc
+gc.collect()
 jsonInputs = utilities().jsonHandler()
 print("json inputs")
 print(jsonInputs)

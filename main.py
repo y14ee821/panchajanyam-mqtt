@@ -1,11 +1,7 @@
 from machine import Pin
 
 dettach_attach_REPL = 1
-
-
-import uos
 dettach_attach_REPL and uos.dupterm(None, 1)#to deattach uart0 to repl
-
 from wifiConnect import connect
 from mqtt_handle import mqttOperations
 from utils import *

@@ -33,4 +33,11 @@ class utilities:
             outputPins["op%s"%(str(i+1))] = machine.Pin(i+1,machine.Pin.OUT)
         print(outputPins)
         return outputPins
+    def stringFormatterForJSClient(self,dict_item):
+        opString = ""
+        for k in dict_item:
+            opString = opString+str(k)+":"+str(dict_item[k].value())+"-"
+        return opString[0:len(opString)-1]
+
+
 #log = utilities.logger()
