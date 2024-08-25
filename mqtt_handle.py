@@ -2,6 +2,7 @@ from mqtt_custom import MQTTClient
 import time
 import uos
 import gc
+gc.collect()
 from utils import *
 from machine import UART,Pin
 utils = utilities()
@@ -23,6 +24,7 @@ class mqttOperations:
     def connect_and_subscribe(self):
       clientName = self.inputs["client"]+str(time.ticks_ms())
       try:
+        gc.collect()
         client = MQTTClient(clientName, self.inputs["broker"],port=self.inputs["port"])
         client.set_callback(self.sub_cb)
         client.connect()
@@ -38,6 +40,7 @@ class mqttOperations:
           print("Got Error %s, Restarting the MCU"%(error))
           utils.restart_and_reconnect()
         while True:
+          gc.collect()
           try:
             new_message = client.check_msg()
             time.sleep_ms(1000)
@@ -49,6 +52,7 @@ class mqttOperations:
             utils.restart_and_reconnect()
 
     def uartCommunication(self,incomingData):    
+      gc.collect()
       data = incomingData.decode()
       self.inputs["REPL_FLAG"] and uos.dupterm(None, 1)#to deattach uart0 to repl
       uart = UART(0, 115200)

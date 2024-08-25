@@ -15,7 +15,7 @@ else:
 
 jsonInputs = utils.jsonHandler()
 
-
+    
 class mqtt_handle:
     def __init__(self):
         pass
