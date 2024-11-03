@@ -1,6 +1,7 @@
 int numberOfOutputs=4;
 //String receivedString = "op1:0-op2:0-op3:1-op4:0-op5:1";
 bool logging = 0;
+bool inversion = 1;// for inversting the output states(it will be useful if relay module has ground trigger.)
 typedef struct{
   int opPin;
   int ipSwitchPin;
@@ -48,16 +49,27 @@ delay(50);
 
 }
 
+bool opInversion(int state)
+{
+  if(inversion == 1)
+  {
+    return(!state);
+  }
+  else
+  {
+    return state;
+  }
+}
 
 void opControl(int ipSwitchPin,int opPin,int i )
 {
   if(digitalRead(ipSwitchPin) == LOW)
   {
-    digitalWrite(opPin, LOW);
+    digitalWrite(opPin, opInversion(0));
   }
   else
   {
-    digitalWrite(opPin, HIGH);
+    digitalWrite(opPin, opInversion(1));
   }
 }
 
@@ -158,11 +170,11 @@ void SwitchControl()
       //Serial.println("hi");
       if(masterInfo[i].uartValue=="1")
       {
-      digitalWrite(masterInfo[i].opPin,1);
+      digitalWrite(masterInfo[i].opPin,opInversion(1));
       }
       if(masterInfo[i].uartValue=="0")
       {
-      digitalWrite(masterInfo[i].opPin,0);
+      digitalWrite(masterInfo[i].opPin,opInversion(0));
       }      
       //opControl(masterInfo[i].ipSwitchPin,masterInfo[i].opPin,i);
     }
